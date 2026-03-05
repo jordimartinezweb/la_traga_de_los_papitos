@@ -43,15 +43,15 @@ function rand(arr){
 
 // ===== SÍMBOLOS =====
 const SYMBOLS = [
-  { code: "CIRC_VERDE",        w: 14 },
-  { code: "CIRC_AZUL",         w: 14 },
-  { code: "ROMBO_MORADO",      w: 14 },
-  { code: "HEX_AMARILLO",      w: 14 },
-  { code: "ROMBO_AZUL",        w: 14 },
-  { code: "ESTRELLA_AMARILLA", w: 14 },
-  { code: "TRIANGULO",         w: 6  },
-  { code: "CORAZON",           w: 6  },
-  { code: "ESCUDO",            w: 4  },
+  { code: "CIRC_VERDE",        w: 24 },
+  { code: "CIRC_AZUL",         w: 24 },
+  { code: "ROMBO_MORADO",      w: 22 },
+  { code: "HEX_AMARILLO",      w: 22 },
+  { code: "ROMBO_AZUL",        w: 18 },
+  { code: "ESTRELLA_AMARILLA", w: 18 },
+  { code: "TRIANGULO",         w: 12  },
+  { code: "CORAZON",           w: 12  },
+  { code: "ESCUDO",            w: 7  },
 ];
 
 function pickWeightedSymbol() {
