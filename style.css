@@ -1,0 +1,208 @@
+/* RESET */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.app {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  background: #070611;
+  padding: 10px;
+}
+
+/* MÁQUINA */
+.machine {
+  position: relative;
+  width: min(96vw, 520px);
+  max-height: 100svh;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: 18px;
+  background: url("./img/fondo.png") center / contain no-repeat;
+}
+
+/* ZONA 3x3 */
+.reels{
+  position: absolute;
+  left: 14%;
+  top: 20%;
+  width: 72%;
+  height: 43%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5%;
+}
+
+.reel{
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 6%;
+}
+
+/* SLOT */
+.slot{
+  position: relative;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  transition: transform 120ms ease, box-shadow 120ms ease, outline 120ms ease, filter 120ms ease;
+}
+
+/* IMAGEN DEL SÍMBOLO */
+.slot img.symbol{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* IMAGEN DE LA CARA */
+.slot img.face{
+  position: absolute;
+  inset: 10%;
+  width: 75%;
+  height: 75%;
+  object-fit: cover;
+  border-radius: 12px;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.6));
+}
+
+/* CASILLAS GANADORAS */
+.slot.win{
+  outline: 3px solid rgba(255, 230, 0, 0.863);
+  box-shadow: 0 0 18px rgba(255, 50, 50, 0.80);
+  transform: scale(1.06);
+  filter: saturate(1.15);
+}
+
+
+
+/* BOTONES (hitbox invisible sobre el arte) */
+.play-btn, .stop-btn{
+  position: absolute;
+  bottom: 17.5%;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 14px;
+  font-weight: 900;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 20;
+  background: transparent;
+  color: transparent;
+}
+
+.play-btn{
+  left: 36%;
+  transform: translateX(-50%);
+}
+
+.stop-btn{
+  left: 65%;
+  transform: translateX(-50%);
+}
+
+.play-btn:active,
+.stop-btn:active{
+  transform: translateX(-50%) scale(0.96);
+}
+
+/* TEXTO INTENTOS */
+.tries{
+  position: absolute;
+  left: 69%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  z-index: 30;
+  color: rgba(255,255,255,0.95);
+  font-weight: 900;
+  font-size: 20px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  pointer-events: none;
+}
+
+/* OVERLAY */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  padding-bottom:1px;
+  background: rgba(0,0,0,0.65);
+  z-index:100;
+}
+
+/* ✅ FIX DEFINITIVO: si tiene hidden, se oculta SIEMPRE */
+.overlay.hidden{
+  display:none;
+}
+
+.modal{
+  position:relative;
+  width: 92%;
+  max-width: 500px;
+}
+
+.modal__bg{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.modal__content{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:40px;
+  color:white;
+}
+
+#modalTitle{
+  font-size:28px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+#modalBody{
+  font-size:18px;
+  font-weight: 900;
+}
+
+#modalBtn{
+  margin-top:20px;
+  padding:12px 24px;
+  border:none;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.tabla-premios{
+  position:absolute;
+
+  bottom:1%;
+  left:1%;
+
+  width:35%;
+  height:auto;
+
+  z-index:25;
+  pointer-events:none;
+}

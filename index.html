@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>La Traga de los Papitos</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <main class="app">
+
+    <section class="machine" aria-label="Tragaperras">
+
+      <!-- TABLERO RODILLOS -->
+      <div class="reels">
+
+        <div class="reel" data-reel="0">
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+        </div>
+
+        <div class="reel" data-reel="1">
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+        </div>
+
+        <div class="reel" data-reel="2">
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+        </div>
+
+      </div>
+
+
+      <!-- BOTONES SUPERPUESTOS SOBRE LA IMAGEN -->
+      <button class="play-btn" id="btnStart">START</button>
+      <button class="stop-btn" id="btnStop" disabled>STOP</button>
+
+      <!-- CONTADOR DE INTENTOS -->
+      <div id="triesLabel" class="tries">Intentos disponibles: 5</div>
+
+      <!-- OVERLAY (SOLO PARA PREMIO O FIN DE JUEGO) -->
+      <div class="overlay hidden" id="overlay">
+        <div class="modal">
+          <img src="./img/overlay.png" class="modal__bg" alt="Panel premio">
+
+          <div class="modal__content">
+            <h2 id="modalTitle"></h2>
+            <p id="modalBody"></p>
+            <button id="modalBtn">CONTINUAR</button>
+          </div>
+        </div>
+      </div>
+      <img src="./img/premios.png" class="tabla-premios" alt="Tabla de premios">
+
+    </section>
+
+  </main>
+
+  <script src="./script.js"></script>
+  
+</body>
+</html>
