@@ -34,8 +34,12 @@ function renderTries(){
   triesLabel.textContent = `Intentos disponibles: ${tiradasRestantes}`;
 }
 
-// ===== CARAS =====2
-const faces = ["carlos", "fito", "juan", "bayona", "aaron", "abel", "alberto", "alex", "belen", "chanza", "eric", "juanma", "manel", "marti", "martinn", "morente", "omar", "oriol", "osel", "sergi", "sergio", "tamo"];
+// ===== CARAS =====
+const faces = [
+  "carlos", "fito", "juan", "bayona", "aaron", "abel", "alberto",
+  "alex", "belen", "chanza", "eric", "juanma", "manel", "marti",
+  "martinn", "morente", "omar", "oriol", "osel", "sergi", "sergio", "tamo"
+];
 
 function rand(arr){
   return arr[Math.floor(Math.random()*arr.length)];
@@ -43,14 +47,14 @@ function rand(arr){
 
 // ===== SÍMBOLOS =====
 const SYMBOLS = [
-  { code: "CIRC_VERDE",        w: 24 },
-  { code: "CIRC_AZUL",         w: 24 },
-  { code: "ROMBO_MORADO",      w: 22 },
-  { code: "HEX_AMARILLO",      w: 22 },
-  { code: "ROMBO_AZUL",        w: 18 },
-  { code: "ESTRELLA_AMARILLA", w: 18 },
-  { code: "TRIANGULO",         w: 12  },
-  { code: "CORAZON",           w: 12  },
+  { code: "CIRC_VERDE",        w: 30 },
+  { code: "CIRC_AZUL",         w: 30 },
+  { code: "ROMBO_MORADO",      w: 24 },
+  { code: "HEX_AMARILLO",      w: 24 },
+  { code: "ROMBO_AZUL",        w: 20 },
+  { code: "ESTRELLA_AMARILLA", w: 20 },
+  { code: "TRIANGULO",         w: 16 },
+  { code: "CORAZON",           w: 16 },
   { code: "ESCUDO",            w: 7  },
 ];
 
@@ -148,7 +152,7 @@ function stopFakeSpin(reelIndex){
 }
 
 function stopAllSpins(){
-  for (let i=0;i<3;i++) stopFakeSpin(i);
+  for (let i = 0; i < 3; i++) stopFakeSpin(i);
 }
 
 function generateFinalColumn(){
@@ -169,17 +173,46 @@ async function slowStop(reelIndex){
   const finalCol = generateFinalColumn();
   board[reelIndex] = finalCol;
 
- const steps = [60, 80, 110, 150, 210, 300, 420, 600];
-  for(const ms of steps){
+  const steps = [60, 80, 110, 150, 170, 200, 220, 250, 270, 300,];
+
+  for (const ms of steps){
     slots[reelIndex].forEach(slot => {
       paintSlot(slot, pickWeightedSymbol(), rand(faces));
     });
     await sleep(ms);
   }
 
-  for(let r=0; r<3; r++){
+  for (let r = 0; r < 3; r++){
     paintSlot(slots[reelIndex][r], finalCol[r].symbol, finalCol[r].face);
   }
+}
+
+// ===== PARADA AUTOMÁTICA SECUENCIAL =====
+async function autoStopSequence() {
+  if (!spinning || stopping) return;
+
+  stopping = true;
+  btnStop.disabled = true;
+
+  await slowStop(0);
+  await sleep(120);
+
+  await slowStop(1);
+  await sleep(120);
+
+  await slowStop(2);
+
+  stopIndex = 3;
+  stopping = false;
+  spinning = false;
+
+  btnStart.disabled = false;
+  btnStop.disabled = true;
+
+  stopAllSpins();
+
+  const result = evaluateBoard();
+  finishSpin(result);
 }
 
 // ===== EVALUACIÓN =====
@@ -199,14 +232,16 @@ function evaluateBoard(){
   for (let i = 0; i < lines.length; i++){
     const { coords, cells } = lines[i];
 
-    if (cells[0] && cells[1] && cells[2] &&
-        cells[0].symbol === cells[1].symbol &&
-        cells[1].symbol === cells[2].symbol){
-      return { win:true, best: cells[0].symbol, coords };
+    if (
+      cells[0] && cells[1] && cells[2] &&
+      cells[0].symbol === cells[1].symbol &&
+      cells[1].symbol === cells[2].symbol
+    ){
+      return { win: true, best: cells[0].symbol, coords };
     }
   }
 
-  return { win:false, best:null, coords:null };
+  return { win: false, best: null, coords: null };
 }
 
 // ===== START =====
@@ -228,34 +263,15 @@ btnStart.addEventListener("click", () => {
   btnStart.disabled = true;
   btnStop.disabled = false;
 
-  for(let i=0;i<3;i++){
+  for (let i = 0; i < 3; i++){
     startFakeSpin(i);
   }
 });
 
-// ===== STOP =====
+// ===== STOP (UNA SOLA PULSACIÓN) =====
 btnStop.addEventListener("click", async () => {
   if (!spinning || stopping) return;
-
-  stopping = true;
-  btnStop.disabled = true;
-
-  await slowStop(stopIndex);
-  stopIndex++;
-  stopping = false;
-
-  if (stopIndex >= 3) {
-    spinning = false;
-    btnStart.disabled = false;
-    btnStop.disabled = true;
-
-    stopAllSpins();
-
-    const result = evaluateBoard();
-    finishSpin(result);
-  } else {
-    btnStop.disabled = false;
-  }
+  await autoStopSequence();
 });
 
 // ===== FIN =====
@@ -265,6 +281,7 @@ function finishSpin(result){
 
   if (!result.win){
     clearWinHighlight();
+
     if (tiradasRestantes <= 0){
       showModal("🎮 Fin del juego", "No quedan intentos.", "CONTINUAR");
     }
@@ -280,6 +297,7 @@ function finishSpin(result){
 // ===== RESET =====
 function resetGame(resetHard = false){
   stopAllSpins();
+
   spinning = false;
   stopping = false;
   stopIndex = 0;
